@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 
 import wordReducer from "./wordReducer";
 import sentenceReducer from "./sentenceReducer";
@@ -11,6 +11,7 @@ const WordContextProvider = ({ children }) => {
 
 	const [wordsData, dispatch] = useReducer(wordReducer, initialWords);
 	const [sentecesData, dispatch2] = useReducer(sentenceReducer, initialSenteces);
+
 	const contextValue = {
 		dispatch,
 		dispatch2,

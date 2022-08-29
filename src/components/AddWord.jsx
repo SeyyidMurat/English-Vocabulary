@@ -1,8 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useState } from "react";
 import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box } from "@mantine/core";
-import { WordContext } from "../context/WordContext";
 import { wordApi } from "../api/api";
-import StatusMessage from "./StatusMessage";
+import toast, { Toaster } from "react-hot-toast";
 const wordType = [
 	{ key: 1, value: "noun", label: "Noun" },
 	{ key: 2, value: "verb", label: "Verb" },
@@ -15,11 +14,6 @@ const wordType = [
 ];
 
 const AddWord = () => {
-	const { dispatch } = useContext(WordContext);
-
-	const [openNotification, setOpenNotification] = useState(false);
-	const [statusMessage, setStatusMessage] = useState("");
-
 	const [ınputValue, setInputValue] = useState({
 		wordType: "",
 		word: "",
@@ -34,23 +28,17 @@ const AddWord = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		try {
 			const { data } = await wordApi.post("api/words/add", ınputValue);
-			dispatch({ type: "ADD_WORDS", payload: ınputValue });
-			setStatusMessage({ message: data?.message, code: "success" });
+			toast.success(data?.message);
 			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "" });
-			setOpenNotification(true);
 		} catch (error) {
-			setStatusMessage({ message: error?.message, code: "faild" });
+			toast.error(error.message);
 			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "" });
-			setOpenNotification(true);
 		}
 	};
-	useEffect(() => {
-		setTimeout(() => {
-			setOpenNotification(false);
-		}, 1500);
-	}, [openNotification]);
+
 	return (
 		<>
 			<Box sx={{ width: "360px" }}>
@@ -103,12 +91,7 @@ const AddWord = () => {
 					</Card>
 				</form>
 			</Box>
-			{openNotification && (
-				<StatusMessage
-					message={statusMessage.message}
-					color={statusMessage.code === "faild" ? "red" : "green"}
-				/>
-			)}
+			<Toaster position="bottom-right" />
 		</>
 	);
 };

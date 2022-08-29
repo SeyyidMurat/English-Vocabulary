@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { Box, createStyles } from "@mantine/core";
-
+import { useParams } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
 	header: {
 		position: "sticky",
@@ -37,6 +37,12 @@ const useStyles = createStyles((theme) => ({
 
 const Layout = () => {
 	const { classes } = useStyles();
+	const scrollRef = useRef(null);
+	const params = useParams();
+
+	useEffect(() => {
+		scrollRef.current.scrollTop = 0;
+	}, [params.wordType]);
 
 	return (
 		<Box>
@@ -45,7 +51,7 @@ const Layout = () => {
 			</Box>
 			<Box className={classes.content}>
 				<Sidebar />
-				<Box className={classes.main}>
+				<Box className={classes.main} ref={scrollRef}>
 					<Outlet />
 				</Box>
 			</Box>

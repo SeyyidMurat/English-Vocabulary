@@ -8,11 +8,7 @@ const Header = () => {
 		<Box sx={(theme) => ({ padding: "25px 0", background: theme.colors.gray[3] })}>
 			<Container size="xl">
 				<Group align="center" position="apart">
-					<Title order={3}>
-						<Anchor to="/" color="dark" component={Link} size="lg">
-							Learn Word
-						</Anchor>
-					</Title>
+					<Title order={3}>Learn Word</Title>
 					<Group>
 						<Anchor color="dark" component={Link} size="lg" weight="500" to="/sentence">
 							Sentences

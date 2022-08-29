@@ -1,13 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import EditModal from "../components/EditModal";
 import Tools from "../components/Tools";
-import StatusMessage from "../components/StatusMessage";
 import { Table, Group, Button, Text, Box, createStyles } from "@mantine/core";
 import { WordContext } from "../context/WordContext";
 import { wordApi } from "../api/api";
 import { useParams } from "react-router-dom";
 import Loading from "../components/Loading";
-
+import toast, { Toaster } from "react-hot-toast";
 const tableHead = [
 	{ id: 1, title: "Word Type" },
 	{ id: 2, title: "Word" },
@@ -37,12 +36,10 @@ const useStyles = createStyles((theme) => ({
 const Home = () => {
 	const { classes } = useStyles();
 	const { wordsData, dispatch } = useContext(WordContext);
-	const { word } = useParams();
+	const { wordType } = useParams();
 
 	const [editModalShow, setEditModalShow] = useState(false);
 	const [editSelectWord, setEditSelectWord] = useState("");
-	const [openNotification, setOpenNotification] = useState(false);
-	const [statusMessage, setStatusMessage] = useState("");
 
 	const editWord = (item) => {
 		setEditSelectWord(item);
@@ -52,26 +49,18 @@ const Home = () => {
 	const deleteWord = async (id) => {
 		try {
 			const { data } = await wordApi.delete(`/api/words/${id}`);
-			dispatch({ type: "DELETE_WORDS", payload: id });
-			setStatusMessage({ message: data.message, code: "success" });
-			setOpenNotification(true);
+			dispatch({ type: "DELETE_WORDS", payload: { params: wordType, id } });
+			toast.success(data?.message);
 		} catch (error) {
-			setStatusMessage({ message: error.message, code: "faild" });
-			setOpenNotification(true);
+			toast.error(error.message);
 		}
 	};
-
-	useEffect(() => {
-		setTimeout(() => {
-			setOpenNotification(false);
-		}, 1500);
-	}, [openNotification]);
 
 	useEffect(() => {
 		const getAllWords = async () => {
 			try {
 				const { data } = await wordApi.get("/api/words");
-				dispatch({ type: "GET_WORDS", payload: { data, word } });
+				dispatch({ type: "GET_WORDS", payload: { data, wordType } });
 			} catch (error) {
 				console.log(error);
 			}
@@ -138,20 +127,13 @@ const Home = () => {
 						)}
 					</tbody>
 				</Table>
-				{openNotification && (
-					<StatusMessage
-						message={statusMessage.message}
-						color={statusMessage.code === "faild" ? "red" : "green"}
-					/>
-				)}
-				{editModalShow && (
-					<EditModal
-						opened={editModalShow}
-						onClose={() => setEditModalShow(false)}
-						selectWord={editSelectWord}
-					/>
-				)}
 			</Box>
+
+			{editModalShow && (
+				<EditModal opened={editModalShow} onClose={() => setEditModalShow(false)} selectWord={editSelectWord} />
+			)}
+
+			<Toaster position="bottom-right" />
 		</>
 	);
 };

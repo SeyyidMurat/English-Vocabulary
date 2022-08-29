@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { InputWrapper, Stack, Card, Button, Box, Textarea } from "@mantine/core";
 import { wordApi } from "../api/api";
-import StatusMessage from "./StatusMessage";
+import toast, { Toaster } from "react-hot-toast";
 const AddSentence = () => {
 	const [ınputValue, setInputValue] = useState({
 		sentence: "",
 		meaning: "",
 	});
-	const [openNotification, setOpenNotification] = useState(false);
-	const [statusMessage, setStatusMessage] = useState("");
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -19,21 +17,14 @@ const AddSentence = () => {
 		e.preventDefault();
 		try {
 			const { data } = await wordApi.post("api/sentences/add", ınputValue);
-			setStatusMessage({ message: data?.message, code: "success" });
+			toast.success(data?.message);
 			setInputValue({ sentence: "", meaning: "" });
-			setOpenNotification(true);
 		} catch (error) {
-			setStatusMessage({ message: error?.message, code: "faild" });
+			toast.error(error.message);
 			setInputValue({ sentence: "", meaning: "" });
-			setOpenNotification(true);
 		}
 	};
 
-	useEffect(() => {
-		setTimeout(() => {
-			setOpenNotification(false);
-		}, 1500);
-	}, [openNotification]);
 	return (
 		<>
 			<Box sx={{ width: "360px" }}>
@@ -69,12 +60,7 @@ const AddSentence = () => {
 					</Card>
 				</form>
 			</Box>
-			{openNotification && (
-				<StatusMessage
-					message={statusMessage.message}
-					color={statusMessage.code === "faild" ? "red" : "green"}
-				/>
-			)}
+			<Toaster position="bottom-right" />
 		</>
 	);
 };

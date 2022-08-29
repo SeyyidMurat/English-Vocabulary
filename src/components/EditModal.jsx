@@ -2,14 +2,14 @@ import { useState, useContext } from "react";
 import { InputWrapper, Input, Stack, Button, Modal } from "@mantine/core";
 import { WordContext } from "../context/WordContext";
 import { wordApi } from "../api/api";
-import StatusMessage from "./StatusMessage";
-
+import { useParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 const EditModal = (props) => {
+	const params = useParams();
+
 	const { dispatch } = useContext(WordContext);
 
 	const [ınputValues, setInputValues] = useState(props.selectWord);
-	const [openNotification, setOpenNotification] = useState(false);
-	const [statusMessage, setStatusMessage] = useState("");
 
 	const { _id, word, meaning, pronunciation, wordType } = ınputValues;
 
@@ -23,13 +23,11 @@ const EditModal = (props) => {
 
 		try {
 			const { data } = await wordApi.put(`/api/words/update/${_id}`, { wordType, word, meaning, pronunciation });
-			dispatch({ type: "UPDATE_WORDS", payload: ınputValues });
-			setStatusMessage({ message: data.message, code: "success" });
-			setOpenNotification(true);
+			dispatch({ type: "UPDATE_WORDS", payload: { params: params.wordType, editInputs: ınputValues } });
+			toast.success(data?.message);
 			props.onClose();
 		} catch (error) {
-			setStatusMessage({ message: error.message, code: "faild" });
-			setOpenNotification(true);
+			toast.error(error.message);
 			props.onClose();
 		}
 	};
@@ -75,13 +73,7 @@ const EditModal = (props) => {
 					</Stack>
 				</form>
 			</Modal>
-
-			{openNotification && (
-				<StatusMessage
-					message={statusMessage.message}
-					color={statusMessage.code === "faild" ? "red" : "green"}
-				/>
-			)}
+			<Toaster position="bottom-right" />
 		</>
 	);
 };

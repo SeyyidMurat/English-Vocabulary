@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { Box, Group, NativeSelect, TextInput, createStyles } from "@mantine/core";
 import { WordContext } from "../context/WordContext";
 import SearchIcon from "../assets/icons/SearchIcon";
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -26,15 +25,14 @@ const useStyles = createStyles((theme) => ({
 const Tools = () => {
 	const { classes } = useStyles();
 	const { dispatch } = useContext(WordContext);
+
+	const { wordType } = useParams();
+	const inputRef = useRef(null);
+
 	const [selectValue, setSelectValue] = useState("");
-	const [searchValue, setSearchValue] = useState("");
-	const params = useParams();
-	const handleSearch = (e) => {
-		e.preventDefault();
-		if (searchValue === "") {
-			return alert("You must fill the field. Please...");
-		}
-		dispatch({ type: "SEARCH_WORDS", payload: { params: params.word, search: searchValue } });
+
+	const handleChange = () => {
+		dispatch({ type: "SEARCH_WORDS", payload: { params: wordType, search: inputRef.current.value } });
 	};
 
 	const handleSort = (e) => {
@@ -42,30 +40,15 @@ const Tools = () => {
 		setSelectValue("");
 	};
 
-	useEffect(() => {
-		const getWords = () => {
-			if (searchValue === "") {
-				dispatch({ type: "SEARCH_WORDS", payload: { params: params.word, search: searchValue } });
-			}
-		};
-		getWords();
-	}, [searchValue]);
-
 	return (
 		<Box className={classes.wrapper}>
 			<Group position="apart">
-				<form onSubmit={handleSearch}>
-					<Box className={classes.search}>
-						<TextInput
-							placeholder="Search Word"
-							value={searchValue}
-							onChange={(e) => setSearchValue(e.currentTarget.value)}
-						/>
-						<button className={classes.icon} type="submit">
-							<SearchIcon />
-						</button>
-					</Box>
-				</form>
+				<Box className={classes.search}>
+					<TextInput placeholder="Search Word" ref={inputRef} onChange={handleChange} />
+					<div className={classes.icon}>
+						<SearchIcon />
+					</div>
+				</Box>
 
 				<NativeSelect
 					placeholder="Words Sorting"

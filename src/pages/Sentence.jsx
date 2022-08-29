@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { wordApi } from "../api/api";
 import { WordContext } from "../context/WordContext";
-import StatusMessage from "../components/StatusMessage";
 import Loading from "../components/Loading";
 import { Table, Group, Button, Text, Box, createStyles } from "@mantine/core";
 import Header from "../components/Header";
 import DownArrow from "../assets/icons/DownArrow";
+import toast, { Toaster } from "react-hot-toast";
 const tableHead = [
 	{ id: 1, title: "Sentence" },
 	{ id: 2, title: "Mean" },
@@ -46,19 +46,15 @@ const Sentence = () => {
 
 	const { sentecesData, dispatch2 } = useContext(WordContext);
 
-	const [openNotification, setOpenNotification] = useState(false);
-	const [statusMessage, setStatusMessage] = useState("");
 	const [rotateArrow, setRotateArrow] = useState(false);
 
 	const deleteSentence = async (id) => {
 		try {
 			const { data } = await wordApi.delete(`/api/sentences/${id}`);
 			dispatch2({ type: "DELETE_WORDS", payload: id });
-			setStatusMessage({ message: data.message, code: "success" });
-			setOpenNotification(true);
+			toast.success(data?.message);
 		} catch (error) {
-			setStatusMessage({ message: error.message, code: "faild" });
-			setOpenNotification(true);
+			toast.error(error.message);
 		}
 	};
 
@@ -79,12 +75,6 @@ const Sentence = () => {
 		};
 		getAllSentences();
 	}, []);
-
-	useEffect(() => {
-		setTimeout(() => {
-			setOpenNotification(false);
-		}, 1500);
-	}, [openNotification]);
 
 	const ShowSentence = () => {
 		return (
@@ -143,12 +133,7 @@ const Sentence = () => {
 		<div>
 			<Header />
 			{!sentecesData?.senteces ? <Loading /> : <ShowSentence />}
-			{openNotification && (
-				<StatusMessage
-					message={statusMessage.message}
-					color={statusMessage.code === "faild" ? "red" : "green"}
-				/>
-			)}
+			<Toaster position="bottom-right" />
 		</div>
 	);
 };

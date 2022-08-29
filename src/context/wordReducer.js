@@ -6,26 +6,25 @@ const wordReducer = (state, action) => {
 			return {
 				...state,
 				words: action.payload.data,
-				selectWords: action.payload?.data.filter((item) => item.wordType.includes(action.payload?.word ?? "")),
+				selectWords: action.payload?.data.filter((item) =>
+					item.wordType.includes(action.payload.wordType ?? "")
+				),
 				error: undefined,
 			};
-
-		case "ADD_WORDS":
-			const addedWord = state.words.find((xl) => xl.word === action.payload.word);
-			if (!addedWord) {
-				return { ...state, words: [...state.words, action.payload] };
-			} else {
-				return state;
-			}
 		case "UPDATE_WORDS":
 			return {
 				...state,
-				words: state.words.map((xl) => (xl._id === action.payload?._id ? { ...action.payload } : xl)),
+				selectWords: state.words
+					.filter((item) => item.wordType.includes(action.payload.params ?? ""))
+					.map((xl) => (xl._id === action.payload.editInputs._id ? { ...action.payload.editInputs } : xl)),
 			};
 		case "DELETE_WORDS":
 			return {
 				...state,
-				words: state.words.filter((xl) => xl._id !== action.payload),
+				words: state.words.filter((xl) => xl._id !== action.payload.id),
+				selectWords: state.words
+					.filter((item) => item.wordType.includes(action.payload.params ?? ""))
+					.filter((xl) => xl._id !== action.payload.id),
 			};
 		case "SELECT_WORDS":
 			return {
