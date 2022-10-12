@@ -1,10 +1,13 @@
 import React from "react";
-
+import { Loader, Center, Box } from "@mantine/core";
 const Loading = () => {
 	return (
-		<div className="text-center fw--bolder display-5">
-			<p>Loading....</p>
-		</div>
+		<Center style={{ width: "100vw", height: "70vh" }}>
+			<Box align="center">
+				<Loader color="indigo" />
+				<p>Loading...</p>
+			</Box>
+		</Center>
 	);
 };
 

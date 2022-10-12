@@ -1,15 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
 import "./styles/main.css";
-import WordContextProvider from './context/WordContext';
+import WordContextProvider from "./context/WordContext";
+import AuthContextProvider from "./context/AuthContext";
 
 ReactDOM.render(
-    <React.StrictMode>
-		<WordContextProvider>
-			<App />
-		</WordContextProvider>	
-  	</React.StrictMode>,
-  	document.getElementById('root')
+	<React.StrictMode>
+		<AuthContextProvider>
+			<WordContextProvider>
+				<App />
+			</WordContextProvider>
+		</AuthContextProvider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );
-

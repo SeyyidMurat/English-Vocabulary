@@ -1,18 +1,20 @@
 import { useState } from "react";
-import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box } from "@mantine/core";
+import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box, createStyles } from "@mantine/core";
 import { wordApi } from "../api/api";
 import toast, { Toaster } from "react-hot-toast";
-const wordType = [
-	{ key: 1, value: "noun", label: "Noun" },
-	{ key: 2, value: "verb", label: "Verb" },
-	{ key: 3, value: "adjective", label: "Adjective" },
-	{ key: 4, value: "pronoun", label: "Pronoun" },
-	{ key: 5, value: "adverb", label: "Adverb" },
-	{ key: 6, value: "preposition", label: "Preposition" },
-	{ key: 7, value: "conjunction", label: "Conjunction" },
-	{ key: 8, value: "branchEnglish", label: "Branch English" },
-];
 
+const useStyles = createStyles((theme) => ({
+	wrapper: {
+		height: "100%",
+		display: "grid",
+		placeItems: "center",
+	},
+	selectItem: {
+		option: {
+			textTransform: "capitalize",
+		},
+	},
+}));
 const AddWord = () => {
 	const [ınputValue, setInputValue] = useState({
 		wordType: "",
@@ -20,6 +22,8 @@ const AddWord = () => {
 		meaning: "",
 		pronunciation: "",
 	});
+
+	const { classes } = useStyles();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -40,14 +44,15 @@ const AddWord = () => {
 	};
 
 	return (
-		<>
+		<Box className={classes.wrapper}>
 			<Box sx={{ width: "360px" }}>
 				<form onSubmit={handleSubmit}>
 					<Card shadow="lg" p="lg">
 						<Stack spacing="xl">
 							<NativeSelect
+								className={classes.selectItem}
 								label="Choose Word Type"
-								data={wordType}
+								data={JSON.parse(localStorage.getItem("vocabulary")).map((el) => el.vocabulary)}
 								value={ınputValue.wordType}
 								onChange={handleChange}
 								name="wordType"
@@ -92,7 +97,7 @@ const AddWord = () => {
 				</form>
 			</Box>
 			<Toaster position="bottom-right" />
-		</>
+		</Box>
 	);
 };
 

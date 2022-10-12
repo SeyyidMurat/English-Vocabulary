@@ -7,7 +7,7 @@ const wordReducer = (state, action) => {
 				...state,
 				words: action.payload.data,
 				selectWords: action.payload?.data.filter((item) =>
-					item.wordType.includes(action.payload.wordType ?? "")
+					item.wordType.startsWith(action.payload.wordType ?? "")
 				),
 				error: undefined,
 			};
@@ -29,7 +29,7 @@ const wordReducer = (state, action) => {
 		case "SELECT_WORDS":
 			return {
 				...state,
-				selectWords: state.words?.filter((item) => item.wordType.includes(action.payload ?? "")),
+				selectWords: state.words?.filter((item) => item.wordType.startsWith(action.payload ?? "")),
 			};
 		case "SEARCH_WORDS":
 			return {

@@ -6,8 +6,11 @@ import { useParams } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
 	wrapper: {
+		position: "sticky",
+		top: "80px",
 		background: theme.colors.gray[0],
 		padding: theme.spacing.md,
+		zIndex: "11",
 	},
 	search: {
 		position: "relative",
