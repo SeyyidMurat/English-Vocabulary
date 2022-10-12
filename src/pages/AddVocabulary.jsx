@@ -3,6 +3,7 @@ import { InputWrapper, Input, Stack, Card, Button, Box, Group, Container, Text, 
 import toast, { Toaster } from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import DeleteIcon from "../assets/icons/DeleteIcon";
+import { wordType } from "../utils/utils";
 const useStyles = createStyles((theme) => ({
 	wrapper: {
 		height: "100%",
@@ -16,7 +17,7 @@ const AddVocabulary = () => {
 		vocabulary: "",
 	});
 	const [vocabularyList, setVocabularyList] = useState(() =>
-		localStorage.getItem("vocabulary") ? JSON.parse(localStorage.getItem("vocabulary")) : []
+		localStorage.getItem("vocabulary") ? JSON.parse(localStorage.getItem("vocabulary")) : wordType
 	);
 	const { classes } = useStyles();
 
