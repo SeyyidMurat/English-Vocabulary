@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { List, ListItem, Anchor, Box, createStyles } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 import { WordContext } from "../context/WordContext";
-
+import { wordType } from "../utils/utils";
 const useStyles = createStyles((theme) => ({
 	sidebar: {
 		position: "sticky",
@@ -44,7 +44,7 @@ const useStyles = createStyles((theme) => ({
 
 const Sidebar = () => {
 	const [sidebarElements, setSidebarElements] = useState(() =>
-		localStorage.getItem("vocabulary") ? JSON.parse(localStorage.getItem("vocabulary")) : []
+		localStorage.getItem("vocabulary") ? JSON.parse(localStorage.getItem("vocabulary")) : wordType
 	);
 	const params = useParams();
 	const { dispatch } = useContext(WordContext);
