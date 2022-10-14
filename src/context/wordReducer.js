@@ -9,7 +9,6 @@ const wordReducer = (state, action) => {
 				selectWords: action.payload?.data.filter((item) =>
 					item.wordType.startsWith(action.payload.wordType ?? "")
 				),
-				error: undefined,
 			};
 		case "UPDATE_WORDS":
 			return {
@@ -52,6 +51,12 @@ const wordReducer = (state, action) => {
 					}
 				}),
 			};
+		case "ERROR_HANDLER": {
+			return {
+				...state,
+				error: action.payload,
+			};
+		}
 		default:
 			return state;
 	}

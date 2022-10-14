@@ -4,7 +4,7 @@ export const wordApi = axios.create({
 	baseURL: "https://word-learn-apps.herokuapp.com/",
 	headers: {
 		"Content-Type": "application/json",
-		Authorization: localStorage.getItem("vocabularyToken"),
+		Authorization: `Bearer ${localStorage.getItem("vocabularyToken")}`,
 	},
 });
 
@@ -13,7 +13,7 @@ wordApi.interceptors.request.use(
 		const user = localStorage.getItem("vocabularyToken");
 
 		if (user) {
-			config.headers.Authorization = user;
+			config.headers.Authorization = `Bearer ${user} `;
 		}
 
 		return config;

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { InputWrapper, Input, Stack, Button, Modal } from "@mantine/core";
+import { InputWrapper, Input, Stack, Button, Modal, Textarea } from "@mantine/core";
 import { WordContext } from "../context/WordContext";
 import { wordApi } from "../api/api";
 import { useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ const EditModal = (props) => {
 
 	const [ınputValues, setInputValues] = useState(props.selectWord);
 
-	const { _id, word, meaning, pronunciation, wordType } = ınputValues;
+	const { _id, word, meaning, pronunciation, wordType, example } = ınputValues;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -22,7 +22,13 @@ const EditModal = (props) => {
 		e.preventDefault();
 
 		try {
-			const { data } = await wordApi.put(`/api/words/update/${_id}`, { wordType, word, meaning, pronunciation });
+			const { data } = await wordApi.put(`/api/words/update/${_id}`, {
+				wordType,
+				word,
+				meaning,
+				pronunciation,
+				example,
+			});
 			dispatch({ type: "UPDATE_WORDS", payload: { params: params.wordType, editInputs: ınputValues } });
 			toast.success(data?.message);
 			props.onClose();
@@ -67,6 +73,17 @@ const EditModal = (props) => {
 								required
 							/>
 						</InputWrapper>
+						<Textarea
+							label="Example"
+							name="example"
+							placeholder="Example"
+							required
+							autosize
+							minRows={2}
+							value={ınputValues.example}
+							onChange={handleChange}
+						/>
+
 						<Button type="submit" variant="gradient" gradient={{ from: "indigo", to: "cyan" }}>
 							Edit Word
 						</Button>

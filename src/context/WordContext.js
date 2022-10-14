@@ -5,7 +5,7 @@ import wordReducer from "./wordReducer";
 export const WordContext = createContext();
 
 const WordContextProvider = ({ children }) => {
-	const initialWords = { words: "", error: "", selectWords: "" };
+	const initialWords = { words: "" };
 
 	const [wordsData, dispatch] = useReducer(wordReducer, initialWords);
 

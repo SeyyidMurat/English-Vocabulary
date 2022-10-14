@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box, createStyles } from "@mantine/core";
+import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box, Textarea, createStyles } from "@mantine/core";
 import { wordApi } from "../api/api";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -21,6 +21,7 @@ const AddWord = () => {
 		word: "",
 		meaning: "",
 		pronunciation: "",
+		example: "",
 	});
 
 	const { classes } = useStyles();
@@ -36,10 +37,10 @@ const AddWord = () => {
 		try {
 			const { data } = await wordApi.post("api/words/add", ınputValue);
 			toast.success(data?.message);
-			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "" });
+			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "", example: "" });
 		} catch (error) {
 			toast.error(error.message);
-			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "" });
+			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "", example: "" });
 		}
 	};
 
@@ -89,6 +90,18 @@ const AddWord = () => {
 									onChange={handleChange}
 								/>
 							</InputWrapper>
+
+							<Textarea
+								label="Example"
+								name="example"
+								placeholder="Example"
+								required
+								autosize
+								minRows={2}
+								value={ınputValue.example}
+								onChange={handleChange}
+							/>
+
 							<Button type="submit" color="indigo">
 								Add Word
 							</Button>
