@@ -4,7 +4,7 @@ import { wordApi } from "../api/api";
 import { useWordContext } from "../context/WordContext";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { Box, Card, Text, Stack, Button, createStyles, Group, Center, Title } from "@mantine/core";
+import { Box, Card, Text, Stack, Button, createStyles, Group, Center, Title, List, ListItem } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
 	cardListWrapper: {
@@ -14,15 +14,11 @@ const useStyles = createStyles((theme) => ({
 		padding: "1rem",
 	},
 
-	card: {
-		height: "250px",
-	},
 	isFlipped: {
 		transform: "rotateY(180deg)",
 	},
 
 	cardInner: {
-		width: "100%",
 		height: "100%",
 		transition: "transform .5s ease",
 		transformStyle: "preserve-3d",
@@ -30,16 +26,25 @@ const useStyles = createStyles((theme) => ({
 		position: "relative",
 	},
 	cardFace: {
-		position: "absolute",
-		width: "100%",
-		height: "100%",
 		backfaceVisibility: "hidden",
 		overflow: "hidden",
 	},
-	cardFront: {},
+	cardFront: {
+		position: "absolute",
+		inset: 0,
+	},
 	cardBack: {
+		width: "100%",
+		height: "100%",
+		display: "flex",
 		zIndex: 1,
 		transform: "rotateY(180deg)",
+	},
+	cardBackChild: {
+		flex: 1,
+	},
+	cardBackList: {
+		flex: 1,
 	},
 }));
 
@@ -89,13 +94,12 @@ const WordCard = () => {
 			setFlippedCard(index);
 		}
 	};
-	console.log(flippedCard);
+
 	return (
 		<div>
 			<Box className={classes.cardListWrapper}>
 				{selectWords.map((item, index) => (
 					<Card
-						className={classes.card}
 						shadow="sm"
 						p="lg"
 						radius="md"
@@ -108,14 +112,18 @@ const WordCard = () => {
 								<Title order={3}>{item.meaning}</Title>
 							</Center>
 							<Box className={cx(classes.cardBack, classes.cardFace)}>
-								<Stack>
+								<Stack className={classes.cardBackChild}>
 									<Text weight={700} transform="capitalize" size="xl" color="red">
 										{item.word}
 									</Text>
 									<Text size="xl" weight={700}>
 										( {item.pronunciation} )
 									</Text>
-									<Text size="xl">{item.example}</Text>
+									<List className={classes.cardBackList}>
+										{item.example.split(/[\\.?]+/g).map((el, i) => (
+											<ListItem key={i}>{el}</ListItem>
+										))}
+									</List>
 									<Group pt={20}>
 										<Button size="xs" radius="xl" onClick={() => editWord(item)}>
 											Edit

@@ -23,7 +23,7 @@ const CardList = () => {
 
 	if (wordsData.error) return wordsData.error;
 
-	return <div>{wordsData.words ? <WordCard /> : <Loading />}</div>;
+	return <div>{wordsData.words ? <WordCard /> : <Loading width="100%" />}</div>;
 };
 
 export default CardList;
