@@ -1,42 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Table, Group, Button, Text, Box, createStyles } from "@mantine/core";
-import { wordApi } from "../api/api";
-import Loading from "../components/Loading";
-import toast, { Toaster } from "react-hot-toast";
-
-const tableHead = [
-	{ id: 1, title: "Word Type" },
-	{ id: 2, title: "Word" },
-	{ id: 3, title: "Pronunciation" },
-	{ id: 4, title: "Meaning" },
-	{ id: 5, title: "Actions" },
-];
-
-const useStyles = createStyles((theme) => ({
-	hideText: {
-		opacity: "0",
-		transition: "opacity 250ms ease-in-out",
-		color: theme.colors.red[7],
-		fontSize: theme.fontSizes,
-		fontWeight: "700",
-		cursor: "pointer",
-		"&:hover": {
-			opacity: 1,
-		},
-	},
-	tableWrapper: {
-		padding: theme.spacing.lg,
-		overflowX: "auto",
-	},
-	container: {
-		padding: theme.spacing.md,
-		overflowX: "auto",
-	},
-}));
+import React, { useState, useEffect } from 'react';
+import { Group, Button, Box, Center, Text, Flex } from '@mantine/core';
+import { wordApi } from '../api/api';
+import Loading from '../components/Loading';
+import toast, { Toaster } from 'react-hot-toast';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper';
+import WordCard from '../components/WordCard';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const LearnedWords = () => {
-	const { classes } = useStyles();
 	const [learnedWords, setLearnedWords] = useState();
+	const [error, setError] = useState();
 
 	const deleteWord = async (id) => {
 		try {
@@ -52,65 +27,61 @@ const LearnedWords = () => {
 	useEffect(() => {
 		const getAllWords = async () => {
 			try {
-				const { data } = await wordApi.get("/api/learned-words");
+				const { data } = await wordApi.get('/api/learned-words');
 				setLearnedWords(data);
-				console.log(data);
 			} catch (error) {
-				console.log(error);
+				setError(error);
 			}
 		};
 		getAllWords();
 	}, []);
 
-	if (!learnedWords) return <Loading />;
+	if (error)
+		return (
+			<Center style={{ height: '100%' }}>
+				<Text fz="xl">{error}</Text>
+			</Center>
+		);
 
 	return (
-		<Box>
-			<Box className={classes.tableWrapper}>
-				<Table verticalSpacing="md" fontSize="md">
-					<thead>
-						<tr>
-							{tableHead.map((head) => (
-								<th key={head.id}>{head.title}</th>
+		<>
+			{learnedWords ? (
+				<Box h="100%">
+					<Flex justify="center" align="center" h="100%" px="1rem">
+						<Swiper
+							spaceBetween={50}
+							slidesPerView={1}
+							modules={[Pagination, Navigation]}
+							pagination={{
+								type: 'fraction',
+							}}
+							style={{ width: '400px', paddingBottom: '2.5rem' }}
+						>
+							{learnedWords?.map((item, i) => (
+								<SwiperSlide key={item._id} style={{ height: 'auto' }}>
+									<WordCard word={item} index={i}>
+										<Group>
+											<Button
+												variant="outline"
+												color="gray"
+												size="xs"
+												radius="xl"
+												onClick={() => deleteWord(item._id)}
+											>
+												Delete
+											</Button>
+										</Group>
+									</WordCard>
+								</SwiperSlide>
 							))}
-						</tr>
-					</thead>
-					<tbody>
-						{learnedWords?.map((item) => (
-							<tr key={item._id}>
-								<td>{item.wordType}</td>
-								<td>
-									<Text className={classes.hideText}>{item.word}</Text>
-								</td>
-								<td>
-									<Text className={classes.hideText}>{`( ${item.pronunciation} )`}</Text>
-								</td>
-								<td>
-									<Text color="indigo" weight={700} size="lg">
-										{item.meaning}
-									</Text>
-								</td>
-								<td>
-									<Group>
-										<Button
-											variant="outline"
-											color="gray"
-											size="xs"
-											radius="xl"
-											onClick={() => deleteWord(item._id)}
-										>
-											Delete
-										</Button>
-									</Group>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</Table>
-			</Box>
-
-			<Toaster position="bottom-right" />
-		</Box>
+						</Swiper>
+					</Flex>
+					<Toaster position="bottom-right" />
+				</Box>
+			) : (
+				<Loading />
+			)}
+		</>
 	);
 };
 

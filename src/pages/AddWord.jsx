@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { InputWrapper, Input, NativeSelect, Stack, Card, Button, Box, Textarea, createStyles } from "@mantine/core";
-import { wordApi } from "../api/api";
-import toast, { Toaster } from "react-hot-toast";
-
+import { useState } from 'react';
+import { Input, NativeSelect, Stack, Card, Button, Box, Textarea, createStyles } from '@mantine/core';
+import { wordApi } from '../api/api';
+import toast, { Toaster } from 'react-hot-toast';
+import { wordType } from '../utils/utils';
 const useStyles = createStyles((theme) => ({
 	wrapper: {
-		height: "100%",
-		display: "grid",
-		placeItems: "center",
+		height: '100%',
+		display: 'grid',
+		placeItems: 'center',
 	},
 	selectItem: {
 		option: {
-			textTransform: "capitalize",
+			textTransform: 'capitalize',
 		},
 	},
 }));
 const AddWord = () => {
 	const [ınputValue, setInputValue] = useState({
-		wordType: "",
-		word: "",
-		meaning: "",
-		pronunciation: "",
-		example: "",
+		wordType: '',
+		word: '',
+		meaning: '',
+		pronunciation: '',
+		example: '',
 	});
 
 	const { classes } = useStyles();
@@ -35,32 +35,32 @@ const AddWord = () => {
 		e.preventDefault();
 
 		try {
-			const { data } = await wordApi.post("api/words/add", ınputValue);
+			const { data } = await wordApi.post('api/words/add', ınputValue);
 			toast.success(data?.message);
-			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "", example: "" });
+			setInputValue({ wordType: '', word: '', meaning: '', pronunciation: '', example: '' });
 		} catch (error) {
 			toast.error(error.message);
-			setInputValue({ wordType: "", word: "", meaning: "", pronunciation: "", example: "" });
+			setInputValue({ wordType: '', word: '', meaning: '', pronunciation: '', example: '' });
 		}
 	};
 
 	return (
 		<Box className={classes.wrapper}>
-			<Box sx={{ width: "360px" }}>
+			<Box sx={{ width: '360px' }}>
 				<form onSubmit={handleSubmit}>
 					<Card shadow="lg" p="lg">
 						<Stack spacing="xl">
 							<NativeSelect
 								className={classes.selectItem}
 								label="Choose Word Type"
-								data={JSON.parse(localStorage.getItem("vocabulary")).map((el) => el.vocabulary)}
+								data={JSON.parse(localStorage.getItem('vocabulary')).map((el) => el.vocabulary)}
 								value={ınputValue.wordType}
 								onChange={handleChange}
 								name="wordType"
 								placeholder="Select"
 								required
 							/>
-							<InputWrapper id="input-word" label="Enter Word">
+							<Input.Wrapper id="input-word" label="Enter Word">
 								<Input
 									id="input-word"
 									name="word"
@@ -69,8 +69,8 @@ const AddWord = () => {
 									value={ınputValue.word}
 									onChange={handleChange}
 								/>
-							</InputWrapper>
-							<InputWrapper id="input-meaning" label="Meaning ">
+							</Input.Wrapper>
+							<Input.Wrapper id="input-meaning" label="Meaning ">
 								<Input
 									id="input-meaning"
 									name="meaning"
@@ -79,8 +79,8 @@ const AddWord = () => {
 									value={ınputValue.meaning}
 									onChange={handleChange}
 								/>
-							</InputWrapper>
-							<InputWrapper id="input-pronunciation" label="Pronunciation">
+							</Input.Wrapper>
+							<Input.Wrapper id="input-pronunciation" label="Pronunciation">
 								<Input
 									id="input-spoken"
 									name="pronunciation"
@@ -89,7 +89,7 @@ const AddWord = () => {
 									value={ınputValue.pronunciation}
 									onChange={handleChange}
 								/>
-							</InputWrapper>
+							</Input.Wrapper>
 
 							<Textarea
 								label="Example"

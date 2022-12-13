@@ -1,57 +1,57 @@
-import moment from "moment";
+import moment from 'moment';
 
 const wordReducer = (state, action) => {
 	switch (action.type) {
-		case "GET_WORDS":
+		case 'GET_WORDS':
 			return {
 				...state,
 				words: action.payload.data,
 				selectWords: action.payload?.data.filter((item) =>
-					item.wordType.startsWith(action.payload.wordType ?? "")
+					item.wordType.startsWith(action.payload.wordType ?? '')
 				),
 			};
-		case "UPDATE_WORDS":
+		case 'UPDATE_WORDS':
 			return {
 				...state,
 				selectWords: state.words
-					.filter((item) => item.wordType.includes(action.payload.params ?? ""))
+					.filter((item) => item.wordType.includes(action.payload.params ?? ''))
 					.map((xl) => (xl._id === action.payload.editInputs._id ? { ...action.payload.editInputs } : xl)),
 			};
-		case "DELETE_WORDS":
+		case 'DELETE_WORDS':
 			return {
 				...state,
 				words: state.words.filter((xl) => xl._id !== action.payload.id),
 				selectWords: state.words
-					.filter((item) => item.wordType.includes(action.payload.params ?? ""))
+					.filter((item) => item.wordType.includes(action.payload.params ?? ''))
 					.filter((xl) => xl._id !== action.payload.id),
 			};
-		case "SELECT_WORDS":
+		case 'SELECT_WORDS':
 			return {
 				...state,
-				selectWords: state.words?.filter((item) => item.wordType.startsWith(action.payload ?? "")),
+				selectWords: state.words?.filter((item) => item.wordType.startsWith(action.payload ?? '')),
 			};
-		case "SEARCH_WORDS":
+		case 'SEARCH_WORDS':
 			return {
 				...state,
 				selectWords: state.words
-					?.filter((item) => item.wordType.includes(action.payload.params ?? ""))
+					?.filter((item) => item.wordType.includes(action.payload.params ?? ''))
 					.filter((item) => item.word.includes(action.payload.search)),
 			};
-		case "SORTING_WORDS":
+		case 'SORTING_WORDS':
 			return {
 				...state,
 				selectWords: state.selectWords.slice().sort((a, b) => {
 					switch (action.payload) {
-						case "most recently":
-							return moment(b.createdAt).format("x") - moment(a.createdAt).format("x");
-						case "oldest":
-							return moment(a.createdAt).format("x") - moment(b.createdAt).format("x");
+						case 'most recently':
+							return moment(b.createdAt).format('x') - moment(a.createdAt).format('x');
+						case 'oldest':
+							return moment(a.createdAt).format('x') - moment(b.createdAt).format('x');
 						default:
 							return state.selectWords;
 					}
 				}),
 			};
-		case "ERROR_HANDLER": {
+		case 'ERROR_HANDLER': {
 			return {
 				...state,
 				error: action.payload,

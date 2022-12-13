@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import { InputWrapper, Input, Stack, Card, Button, Box, Group, Container, Text, createStyles } from "@mantine/core";
-import toast, { Toaster } from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
-import DeleteIcon from "../assets/icons/DeleteIcon";
-import { wordType } from "../utils/utils";
+import { useState, useEffect } from 'react';
+import { Input, Stack, Card, Button, Box, Group, Container, Text, createStyles } from '@mantine/core';
+import toast, { Toaster } from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
+import DeleteIcon from '../assets/icons/DeleteIcon';
+import { wordType } from '../utils/utils';
 const useStyles = createStyles((theme) => ({
 	wrapper: {
-		height: "100%",
-		display: "grid",
-		placeItems: "center",
+		height: '100%',
+		display: 'grid',
+		placeItems: 'center',
 	},
 }));
 const AddVocabulary = () => {
 	const [ınputValue, setInputValue] = useState({
 		key: uuidv4(),
-		vocabulary: "",
+		vocabulary: '',
 	});
 	const [vocabularyList, setVocabularyList] = useState(() =>
-		localStorage.getItem("vocabulary") ? JSON.parse(localStorage.getItem("vocabulary")) : wordType
+		localStorage.getItem('vocabulary') ? JSON.parse(localStorage.getItem('vocabulary')) : wordType
 	);
 	const { classes } = useStyles();
 
@@ -36,12 +36,12 @@ const AddVocabulary = () => {
 			...vocabularyList,
 			{ ...ınputValue, vocabulary: ınputValue.vocabulary.toLowerCase() },
 		]);
-		toast.success("Success Added");
-		setInputValue(() => ({ key: uuidv4(), vocabulary: "" }));
+		toast.success('Success Added');
+		setInputValue(() => ({ key: uuidv4(), vocabulary: '' }));
 	};
 
 	useEffect(() => {
-		localStorage.setItem("vocabulary", JSON.stringify(vocabularyList));
+		localStorage.setItem('vocabulary', JSON.stringify(vocabularyList));
 	}, [vocabularyList]);
 
 	return (
@@ -67,11 +67,11 @@ const AddVocabulary = () => {
 					))}
 				</Group>
 			</Container>
-			<Box sx={{ width: "360px", alignSelf: "flex-start" }}>
+			<Box sx={{ width: '360px', alignSelf: 'flex-start' }}>
 				<form onSubmit={handleSubmit}>
 					<Card shadow="lg" p="lg" withBorder>
 						<Stack spacing="xl">
-							<InputWrapper id="input-vocabulary" label="Enter Vocabulary">
+							<Input.Wrapper id="input-vocabulary" label="Enter Vocabulary">
 								<Input
 									id="input-word"
 									name="vocabulary"
@@ -80,7 +80,7 @@ const AddVocabulary = () => {
 									value={ınputValue.vocabulary}
 									onChange={handleChange}
 								/>
-							</InputWrapper>
+							</Input.Wrapper>
 							<Button type="submit" color="indigo">
 								Add Vocabulary
 							</Button>

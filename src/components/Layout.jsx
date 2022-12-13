@@ -1,25 +1,32 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Header from "./Header";
-import { Box, createStyles } from "@mantine/core";
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Header from './Header';
+import { createStyles, Flex } from '@mantine/core';
+import MobileMenu from './MobileMenu';
 
 const useStyles = createStyles((theme) => ({
-	content: {
-		paddingTop: "80px",
-		height: "100vh",
+	routeContainer: {
+		height: '100%',
+		position: 'relative',
+		zIndex: '1',
+	},
+	pageWrapper: {
+		height: '100%',
+		paddingTop: '80px',
 	},
 }));
 
 const Layout = () => {
 	const { classes } = useStyles();
-
+	const [isMobileMenu, setIsMobileMenu] = useState(false);
 	return (
-		<Box>
-			<Header />
-			<Box className={classes.content}>
+		<div className={classes.routeContainer}>
+			<Flex direction="column" className={classes.pageWrapper}>
+				<Header setToggle={setIsMobileMenu} />
 				<Outlet />
-			</Box>
-		</Box>
+			</Flex>
+			{isMobileMenu && <MobileMenu setToggle={setIsMobileMenu} />}
+		</div>
 	);
 };
 

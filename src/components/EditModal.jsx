@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import { InputWrapper, Input, Stack, Button, Modal, Textarea } from "@mantine/core";
-import { WordContext } from "../context/WordContext";
-import { wordApi } from "../api/api";
-import { useParams } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { useState, useContext } from 'react';
+import { Input, Stack, Button, Modal, Textarea } from '@mantine/core';
+import { WordContext } from '../context/WordContext';
+import { wordApi } from '../api/api';
+import { useParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 const EditModal = (props) => {
 	const params = useParams();
 
@@ -29,7 +29,7 @@ const EditModal = (props) => {
 				pronunciation,
 				example,
 			});
-			dispatch({ type: "UPDATE_WORDS", payload: { params: params.wordType, editInputs: ınputValues } });
+			dispatch({ type: 'UPDATE_WORDS', payload: { params: params.wordType, editInputs: ınputValues } });
 			toast.success(data?.message);
 			props.onClose();
 		} catch (error) {
@@ -43,7 +43,7 @@ const EditModal = (props) => {
 			<Modal opened={props.opened} onClose={props.onClose}>
 				<form onSubmit={handleSubmit}>
 					<Stack spacing="xl">
-						<InputWrapper id="input-word" label="Enter Word">
+						<Input.Wrapper id="input-word" label="Enter Word">
 							<Input
 								id="input-word"
 								name="word"
@@ -52,8 +52,8 @@ const EditModal = (props) => {
 								onChange={handleChange}
 								required
 							/>
-						</InputWrapper>
-						<InputWrapper id="input-meaning" label="Meaning ">
+						</Input.Wrapper>
+						<Input.Wrapper id="input-meaning" label="Meaning ">
 							<Input
 								id="input-meaning"
 								name="meaning"
@@ -62,8 +62,8 @@ const EditModal = (props) => {
 								onChange={handleChange}
 								required
 							/>
-						</InputWrapper>
-						<InputWrapper id="input-pronunciation" label="Pronunciation">
+						</Input.Wrapper>
+						<Input.Wrapper id="input-pronunciation" label="Pronunciation">
 							<Input
 								id="input-spoken"
 								name="pronunciation"
@@ -72,7 +72,7 @@ const EditModal = (props) => {
 								onChange={handleChange}
 								required
 							/>
-						</InputWrapper>
+						</Input.Wrapper>
 						<Textarea
 							label="Example"
 							name="example"
@@ -84,7 +84,7 @@ const EditModal = (props) => {
 							onChange={handleChange}
 						/>
 
-						<Button type="submit" variant="gradient" gradient={{ from: "indigo", to: "cyan" }}>
+						<Button type="submit" variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }}>
 							Edit Word
 						</Button>
 					</Stack>
